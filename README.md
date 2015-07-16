@@ -19,17 +19,17 @@ gem 'settings-rails'
 
 ### Fetching settings
 
-To fetch stored settings all you need is to use the `Settings.fetch` method :
+To fetch stored settings all you need is to use the `Settings.get` method :
 
 ```ruby
-Settings.fetch(:minimum_free_shipping_price)
+Settings.get(:minimum_free_shipping_price)
 ```
 
 If you're unsure wether the setting will be created or not at that moment,
 you can pass it the type of the setting as an argument.
 
 ```ruby
-Settings.fetch(:minimum_free_shipping_price, :float)
+Settings.get(:minimum_free_shipping_price, :float)
 ```
 
 If not found, the setting will be built and have the right type.
@@ -65,7 +65,7 @@ Then in your edit form :
 
 ```ruby
 = form_for SettingsRails::Form.new, url: settings_path do |form|
-  = form.fields_for :settings, Settings.fetch(:minimum_free_shipping_price, :float) do |fields|
+  = form.fields_for :settings, Settings.get(:minimum_free_shipping_price, :float) do |fields|
     = fields.hidden_field :key
     = fields.hidden_field :_type
     = fields.label :value, 'Minimum free shipping cart total price'
