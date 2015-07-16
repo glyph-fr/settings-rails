@@ -54,8 +54,17 @@ to persist it.
 The gem contains a `SettingsRails::Form` class which allows you to easily
 create nested settings form in one page.
 
+Create a `SettingsController` in your app, and add the `edit` and `update`
+actions. Then route to them :
+
 ```ruby
-= form_for SettingsRails::Form.new do |form|
+resource :settings, only: [:edit, :update]
+```
+
+Then in your edit form :
+
+```ruby
+= form_for SettingsRails::Form.new, url: settings_path do |form|
   = form.fields_for :settings, Settings.fetch(:minimum_free_shipping_price, :float) do |fields|
     = fields.hidden_field :key
     = fields.hidden_field :_type
@@ -63,5 +72,25 @@ create nested settings form in one page.
     = fields.number_field :value
 ```
 
+The `SettingsRails::Form` instance is always considered to be persisted, so
+the form will automatically be submitted to the `#update` controller action.
 
+```ruby
+class SettingsController < ApplicationController
+  def update
+    form = SettingsRails::Form.new
+    form.settings_attributes = settings_params[:settings_attributes]
+    form.save
+    redirect_to settings_path
+  end
+
+  private
+
+  def settings_params
+    params.require(:settings).permit(settings_attributes: [:key, :_type, :value])
+  end
+end
+```
+
+You're setup.
 
