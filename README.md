@@ -15,6 +15,13 @@ Add it to your Gemfile and bundle :
 gem 'settings-rails'
 ```
 
+Use the install generator to copy migrations, and then migrate :
+
+```bash
+rails generate settings_rails:install
+rake db:migrate
+```
+
 ## Usage
 
 ### Fetching settings
